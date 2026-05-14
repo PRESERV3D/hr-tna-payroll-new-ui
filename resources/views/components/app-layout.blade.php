@@ -6,6 +6,27 @@
     <title>{{ $title ?? 'HR System' }}</title>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        details.organization-menu > .organization-submenu {
+            display: none;
+        }
+
+        details.organization-menu[open] > .organization-submenu {
+            display: block;
+        }
+
+        details.organization-menu .organization-arrow {
+            transition: transform 300ms ease;
+        }
+
+        details.organization-menu[open] .organization-arrow {
+            transform: rotate(180deg);
+        }
+
+        details.organization-menu > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
     {{ $head ?? '' }}
 </head>
 <body class="min-h-screen bg-slate-100">
@@ -35,25 +56,27 @@
                     <span class="hidden whitespace-nowrap font-medium group-hover:inline">Payroll</span>
                 </a>
 
-                <details class="rounded-lg {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'bg-slate-900/60' : '' }}" {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'open' : '' }}>
+                <details class="organization-menu rounded-lg {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'bg-slate-900/60' : '' }}" {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'open' : '' }}>
                     <summary class="flex cursor-pointer list-none items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
                         <span class="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center">
                             <i class="fas fa-building text-lg"></i>
                         </span>
                         <span class="hidden flex-1 whitespace-nowrap font-medium group-hover:inline">Organization</span>
-                        <span class="hidden text-xs text-slate-400 group-hover:inline">▼</span>
+                        <span class="organization-arrow hidden text-xs text-slate-400 group-hover:inline">▼</span>
                     </summary>
 
-                    <div class="mx-3 mb-2 hidden space-y-1 rounded-md border border-slate-800 bg-slate-900/70 p-2 group-hover:block">
-                        <a href="{{ route('organization.departments.index') }}" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('organization.departments.*') ? 'bg-slate-800' : '' }}">
-                            <i class="fas fa-chart-bar text-xs"></i>
-                            <span>Departments</span>
-                        </a>
+                    <div class="organization-submenu ml-6 border-l border-white/20 pl-4 pb-1">
+                        <div class="space-y-1 py-1">
+                            <a href="{{ route('organization.departments.index') }}" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('organization.departments.*') ? 'bg-slate-800' : '' }}">
+                                <i class="fas fa-sitemap text-xs"></i>
+                                <span>Departments</span>
+                            </a>
 
-                        <a href="{{ route('organization.positions.index') }}" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('organization.positions.*') ? 'bg-slate-800' : '' }}">
-                            <i class="fas fa-cog text-xs"></i>
-                            <span>Positions</span>
-                        </a>
+                            <a href="{{ route('organization.positions.index') }}" class="flex items-center gap-3 rounded-md px-3 py-2 text-sm text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('organization.positions.*') ? 'bg-slate-800' : '' }}">
+                                <i class="fas fa-briefcase text-xs"></i>
+                                <span>Positions</span>
+                            </a>
+                        </div>
                     </div>
                 </details>
             </nav>
