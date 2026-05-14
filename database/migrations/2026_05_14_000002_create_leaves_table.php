@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('leaves', function (Blueprint $table) {
+        if (!Schema::hasTable('leaves')) {
+            Schema::create('leaves', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->string('type'); // sick, vacation, personal, etc.
@@ -21,7 +22,8 @@ return new class extends Migration
             $table->text('reason')->nullable();
             $table->foreignId('approved_by')->nullable()->constrained('users')->cascadeOnDelete();
             $table->timestamps();
-        });
+            });
+        }
     }
 
     /**
@@ -32,3 +34,4 @@ return new class extends Migration
         Schema::dropIfExists('leaves');
     }
 };
+

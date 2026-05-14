@@ -20,18 +20,18 @@
     {{-- Steps --}}
     <div class="relative flex items-center justify-between">
         {{-- Connecting line behind steps --}}
-        <div class="absolute left-0 top-5 h-0.5 w-full bg-slate-200 -z-10"></div>
-        <div id="wizard-progress-line" class="absolute left-0 top-5 h-0.5 bg-indigo-500 -z-10 transition-all duration-500" style="width:0%"></div>
+        <div class="absolute left-0 top-6 h-1 w-full bg-slate-300 -z-10"></div>
+        <div id="wizard-progress-line" class="absolute left-0 top-6 h-1 bg-indigo-600 -z-10 transition-all duration-500" style="width:0%"></div>
 
         @foreach ($steps as $i => $step)
-        <div class="wizard-step-indicator flex flex-col items-center gap-2" data-step="{{ $i + 1 }}">
-            <div class="step-circle flex h-10 w-10 items-center justify-center rounded-full border-2 border-slate-200 bg-white text-sm font-bold text-slate-400 transition-all duration-300">
+        <div class="wizard-step-indicator flex flex-col items-center gap-3" data-step="{{ $i + 1 }}">
+            <div class="step-circle flex h-12 w-12 items-center justify-center rounded-full border-2.5 border-slate-300 bg-white text-base font-bold text-slate-500 shadow-sm transition-all duration-300">
                 <span class="step-num">{{ $i + 1 }}</span>
-                <svg class="step-check hidden h-5 w-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2.5" d="M5 13l4 4L19 7"/>
+                <svg class="step-check hidden h-6 w-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="3" d="M5 13l4 4L19 7"/>
                 </svg>
             </div>
-            <span class="step-label text-xs font-medium text-slate-400 transition-colors duration-300">{{ $step['label'] }}</span>
+            <span class="step-label text-sm font-semibold text-slate-600 transition-colors duration-300">{{ $step['label'] }}</span>
         </div>
         @endforeach
     </div>
@@ -301,11 +301,15 @@
     const TOTAL = 4;
     let current = 1;
 
-    // If validation failed, jump to the first step that has an error
-    const errorFields = document.querySelectorAll('[class*="text-red"]');
-    if (errorFields.length) {
-        const firstError = errorFields[0].closest('.wizard-panel');
-        if (firstError) current = parseInt(firstError.dataset.panel);
+    function isStepCompleted(stepNum) {
+        // A step is only completed if it has been passed and has no error fields
+        if (stepNum >= current) return false; // Future or current steps are not completed
+        
+        const panel = document.querySelector(`.wizard-panel[data-panel="${stepNum}"]`);
+        if (!panel) return false;
+        
+        const errors = panel.querySelectorAll('[class*="text-red"]');
+        return errors.length === 0; // Completed only if no errors
     }
 
     function update() {

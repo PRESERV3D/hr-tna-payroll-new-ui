@@ -5,6 +5,7 @@ use App\Http\Controllers\Auth\RegisterController;
 use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\OrganizationController;
+use App\Http\Controllers\PayrollController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -33,4 +34,7 @@ Route::middleware('auth')->group(function () {
 
     // Employee Management
     Route::resource('employees', EmployeeController::class);
+
+    // Payroll Management
+    Route::get('/payroll', [PayrollController::class, 'index'])->name('payroll.index');
 });

@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('emergency_contacts', function (Blueprint $table) {
+        if (!Schema::hasTable('emergency_contacts')) {
+            Schema::create('emergency_contacts', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
             $table->string('contact_name');
@@ -20,7 +21,8 @@ return new class extends Migration
             $table->string('email')->nullable();
             $table->string('address')->nullable();
             $table->timestamps();
-        });
+            });
+        }
     }
 
     /**
@@ -31,3 +33,4 @@ return new class extends Migration
         Schema::dropIfExists('emergency_contacts');
     }
 };
+

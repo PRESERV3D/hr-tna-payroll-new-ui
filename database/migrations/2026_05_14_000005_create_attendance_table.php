@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('attendance', function (Blueprint $table) {
+        if (!Schema::hasTable('attendance')) {
+            Schema::create('attendance', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('attendance_date');
@@ -22,7 +23,8 @@ return new class extends Migration
             $table->timestamps();
 
             $table->unique(['user_id', 'attendance_date']);
-        });
+            });
+        }
     }
 
     /**
@@ -33,3 +35,4 @@ return new class extends Migration
         Schema::dropIfExists('attendance');
     }
 };
+

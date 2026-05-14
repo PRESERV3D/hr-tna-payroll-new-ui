@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('salary_records', function (Blueprint $table) {
+        if (!Schema::hasTable('salary_records')) {
+            Schema::create('salary_records', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
             $table->decimal('salary_amount', 10, 2);
@@ -21,7 +22,8 @@ return new class extends Migration
             $table->string('reason')->nullable(); // e.g., 'Raise', 'Promotion', 'Adjustment'
             $table->text('notes')->nullable();
             $table->timestamps();
-        });
+            });
+        }
     }
 
     /**
@@ -32,3 +34,4 @@ return new class extends Migration
         Schema::dropIfExists('salary_records');
     }
 };
+

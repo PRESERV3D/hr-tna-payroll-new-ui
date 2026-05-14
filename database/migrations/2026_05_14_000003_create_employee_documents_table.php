@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employee_documents', function (Blueprint $table) {
+        if (!Schema::hasTable('employee_documents')) {
+            Schema::create('employee_documents', function (Blueprint $table) {
             $table->id();
             $table->foreignId('employee_id')->constrained('employees')->onDelete('cascade');
             $table->string('document_type'); // e.g., 'ID', 'Diploma', 'Contract', 'Tax Form'
@@ -22,7 +23,8 @@ return new class extends Migration
             $table->date('expiry_date')->nullable();
             $table->text('description')->nullable();
             $table->timestamps();
-        });
+            });
+        }
     }
 
     /**
@@ -33,3 +35,4 @@ return new class extends Migration
         Schema::dropIfExists('employee_documents');
     }
 };
+

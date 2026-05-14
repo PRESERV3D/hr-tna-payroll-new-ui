@@ -11,7 +11,8 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('employees', function (Blueprint $table) {
+        if (!Schema::hasTable('employees')) {
+            Schema::create('employees', function (Blueprint $table) {
             $table->id();
             $table->string('employee_id')->unique();
 
@@ -63,7 +64,8 @@ return new class extends Migration
 
             $table->timestamps();
             $table->softDeletes();
-        });
+            });
+        }
     }
 
     /**
@@ -74,3 +76,4 @@ return new class extends Migration
         Schema::dropIfExists('employees');
     }
 };
+

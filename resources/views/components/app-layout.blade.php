@@ -28,10 +28,17 @@
                     <span class="hidden whitespace-nowrap font-medium group-hover:inline">Employees</span>
                 </a>
 
+                <a href="{{ route('payroll.index') }}" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('payroll.*') ? 'bg-slate-800' : '' }}">
+                    <span class="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center">
+                        <i class="fas fa-money-bill text-lg"></i>
+                    </span>
+                    <span class="hidden whitespace-nowrap font-medium group-hover:inline">Payroll</span>
+                </a>
+
                 <details class="rounded-lg {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'bg-slate-900/60' : '' }}" {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'open' : '' }}>
                     <summary class="flex cursor-pointer list-none items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
                         <span class="inline-flex h-6 w-6 flex-shrink-0 items-center justify-center">
-                            <i class="fas fa-money-bill text-lg"></i>
+                            <i class="fas fa-building text-lg"></i>
                         </span>
                         <span class="hidden flex-1 whitespace-nowrap font-medium group-hover:inline">Organization</span>
                         <span class="hidden text-xs text-slate-400 group-hover:inline">▼</span>
