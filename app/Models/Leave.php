@@ -10,6 +10,8 @@ class Leave extends Model
 {
     use HasFactory;
 
+    protected $table = 'leave_requests';
+
     protected $fillable = [
         'user_id',
         'type',
@@ -23,6 +25,7 @@ class Leave extends Model
     protected $casts = [
         'start_date' => 'date',
         'end_date' => 'date',
+        'status' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

@@ -20,32 +20,32 @@
                     <span class="hidden whitespace-nowrap font-medium group-hover:inline">Dashboard</span>
                 </a>
 
-                <a href="#" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
+                <a href="{{ route('employees.index') }}" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
                     <span class="inline-flex items-center justify-center h-6 w-6 flex-shrink-0">
                         <i class="fas fa-user text-lg"></i>
                     </span>
                     <span class="hidden whitespace-nowrap font-medium group-hover:inline">Employees</span>
                 </a>
 
-                <a href="#" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
+                <a href="{{ route('organization.departments.index') }}" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
                     <span class="inline-flex items-center justify-center h-6 w-6 flex-shrink-0">
                         <i class="fas fa-money-bill text-lg"></i>
                     </span>
-                    <span class="hidden whitespace-nowrap font-medium group-hover:inline">Payroll</span>
+                    <span class="hidden whitespace-nowrap font-medium group-hover:inline">Organization</span>
                 </a>
 
-                <a href="#" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
+                <a href="{{ route('organization.departments.index') }}" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
                     <span class="inline-flex items-center justify-center h-6 w-6 flex-shrink-0">
                         <i class="fas fa-chart-bar text-lg"></i>
                     </span>
-                    <span class="hidden whitespace-nowrap font-medium group-hover:inline">Reports</span>
+                    <span class="hidden whitespace-nowrap font-medium group-hover:inline">Departments</span>
                 </a>
 
-                <a href="#" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
+                <a href="{{ route('organization.positions.index') }}" class="flex items-center gap-4 rounded-lg px-3 py-3 text-slate-200 transition hover:bg-slate-800">
                     <span class="inline-flex items-center justify-center h-6 w-6 flex-shrink-0">
                         <i class="fas fa-cog text-lg"></i>
                     </span>
-                    <span class="hidden whitespace-nowrap font-medium group-hover:inline">Settings</span>
+                    <span class="hidden whitespace-nowrap font-medium group-hover:inline">Positions</span>
                 </a>
             </nav>
 
@@ -157,6 +157,9 @@
                             <a href="#" class="text-sm text-blue-600 hover:text-blue-700 flex items-center gap-1">View all <i class="fas fa-arrow-right h-4 w-4"></i></a>
                         </div>
                         <div class="divide-y divide-slate-200">
+                            @php
+                                $attendanceStatus = [1 => 'Present', 2 => 'Late', 3 => 'Absent', 4 => 'Excused'];
+                            @endphp
                             @forelse($todayAttendance as $attendance)
                                 <div class="flex items-center justify-between px-6 py-4 hover:bg-slate-50 transition">
                                     <div>
@@ -165,13 +168,14 @@
                                             In: {{ $attendance->check_in ? $attendance->check_in->format('H:i') : '—' }} • Out: {{ $attendance->check_out ? $attendance->check_out->format('H:i') : '—' }}
                                         </p>
                                     </div>
+                                    @php $s = $attendance->status; @endphp
                                     <span class="inline-flex items-center px-3 py-1 rounded-full text-sm font-medium
-                                        @if($attendance->status === 'present') bg-green-100 text-green-800
-                                        @elseif($attendance->status === 'late') bg-orange-100 text-orange-800
-                                        @elseif($attendance->status === 'absent') bg-red-100 text-red-800
+                                        @if($s == 1) bg-green-100 text-green-800
+                                        @elseif($s == 2) bg-orange-100 text-orange-800
+                                        @elseif($s == 3) bg-red-100 text-red-800
                                         @else bg-slate-100 text-slate-800
                                         @endif">
-                                        {{ ucfirst($attendance->status) }}
+                                        {{ $attendanceStatus[$s] ?? 'Unknown' }}
                                     </span>
                                 </div>
                             @empty
@@ -225,4 +229,3 @@
             </div>
         </main>
     </div>
-</x-app-layout>

@@ -25,6 +25,7 @@ class Attendance extends Model
         'attendance_date' => 'date',
         'check_in' => 'datetime:H:i',
         'check_out' => 'datetime:H:i',
+        'status' => 'integer',
         'created_at' => 'datetime',
         'updated_at' => 'datetime',
     ];

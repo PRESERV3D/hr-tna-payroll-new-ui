@@ -44,6 +44,7 @@ class Employee extends Model
         'hire_date' => 'date',
         'regularization_date' => 'date',
         'termination_date' => 'date',
+        'status' => 'integer',
     ];
 
     /**

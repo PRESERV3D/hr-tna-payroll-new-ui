@@ -59,7 +59,8 @@ class EmployeeController extends Controller
             'postal_code' => ['nullable', 'string', 'max:20'],
             'country' => ['nullable', 'string', 'max:80'],
             'employment_type' => ['required', 'in:Full-time,Part-time,Contractual,Intern'],
-            'status' => ['required', 'in:Active,Probationary,On Leave,Resigned,Terminated'],
+            // status codes: 1=Active, 2=Probationary, 3=On Leave, 4=Resigned/Terminated
+            'status' => ['required', 'in:1,2,3,4'],
             'hire_date' => ['required', 'date'],
             'regularization_date' => ['nullable', 'date'],
             'termination_date' => ['nullable', 'date'],
@@ -128,7 +129,8 @@ class EmployeeController extends Controller
             'postal_code' => ['nullable', 'string', 'max:20'],
             'country' => ['nullable', 'string', 'max:80'],
             'employment_type' => ['required', 'in:Full-time,Part-time,Contractual,Intern'],
-            'status' => ['required', 'in:Active,Probationary,On Leave,Resigned,Terminated'],
+            // status codes: 1=Active, 2=Probationary, 3=On Leave, 4=Resigned/Terminated
+            'status' => ['required', 'in:1,2,3,4'],
             'hire_date' => ['required', 'date'],
             'regularization_date' => ['nullable', 'date'],
             'termination_date' => ['nullable', 'date'],

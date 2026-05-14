@@ -21,6 +21,7 @@ class Payroll extends Model
 
     protected $casts = [
         'payroll_date' => 'date',
+        'status' => 'integer',
         'gross_salary' => 'decimal:2',
         'deductions' => 'decimal:2',
         'net_salary' => 'decimal:2',
