@@ -2,6 +2,8 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use App\Http\Controllers\Auth\RegisterController;
+use App\Http\Controllers\EmployeeController;
+use App\Http\Controllers\OrganizationController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -20,4 +22,16 @@ Route::middleware('auth')->group(function () {
         return view('dashboard');
     })->name('dashboard');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
+
+    Route::redirect('/organization', '/organization/departments');
+    Route::get('/organization/departments', [OrganizationController::class, 'departments'])->name('organization.departments.index');
+    Route::post('/organization/departments', [OrganizationController::class, 'storeDepartment'])->name('organization.departments.store');
+    Route::delete('/organization/departments/{department}', [OrganizationController::class, 'destroyDepartment'])->name('organization.departments.destroy');
+
+    Route::get('/organization/positions', [OrganizationController::class, 'positions'])->name('organization.positions.index');
+    Route::post('/organization/positions', [OrganizationController::class, 'storePosition'])->name('organization.positions.store');
+    Route::delete('/organization/positions/{position}', [OrganizationController::class, 'destroyPosition'])->name('organization.positions.destroy');
+
+    // Employee Management
+    Route::resource('employees', EmployeeController::class);
 });
