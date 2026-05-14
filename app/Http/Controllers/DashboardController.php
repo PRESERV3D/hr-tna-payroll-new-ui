@@ -14,8 +14,8 @@ class DashboardController extends Controller
     public function index()
     {
         // Total Employees
-        $totalEmployees = User::where('status', 'active')->count();
-        $newEmployeesThisMonth = User::where('status', 'active')
+        $totalEmployees = User::where('status', 1)->count();
+        $newEmployeesThisMonth = User::where('status', 1)
             ->whereMonth('hire_date', Carbon::now()->month)
             ->whereYear('hire_date', Carbon::now()->year)
             ->count();
