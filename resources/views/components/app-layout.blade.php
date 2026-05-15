@@ -174,10 +174,6 @@
                         <h1 class="text-3xl font-extrabold text-slate-900">{{ $header ?? '' }}</h1>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm lg:flex">
-                            <i class="fas fa-search text-xs text-slate-400"></i>
-                            <span class="text-sm text-slate-500">Search...</span>
-                        </div>
                         <button class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-50" type="button" aria-label="Notifications">
                             <i class="fas fa-bell text-sm"></i>
                         </button>
