@@ -2,12 +2,6 @@
     <x-slot:title>Dashboard</x-slot:title>
     <x-slot:header>Dashboard</x-slot:header>
 
-    <!-- Welcome Message -->
-    <div class="nw-panel mb-8 rounded-2xl bg-linear-to-r from-sky-50 to-cyan-50 p-6">
-        <h2 class="text-xl font-bold text-slate-900">Good morning, {{ strtok(auth()->user()->name, ' ') ?: auth()->user()->name }}</h2>
-        <p class="mt-2 text-sm text-slate-600">Here is your command center for people, attendance, leave, and payroll. Use quick insights below to spot what needs attention now.</p>
-    </div>
-
     <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
         <!-- Total Employees Card -->
         <div class="nw-panel rounded-2xl p-6 transition hover:-translate-y-0.5 hover:shadow-xl">
@@ -15,7 +9,6 @@
                 <div>
                     <p class="text-sm font-medium text-slate-500">Total Employees</p>
                     <p class="mt-2 text-3xl font-extrabold text-slate-900">{{ $totalEmployees }}</p>
-                    <p class="mt-2 text-sm font-semibold text-emerald-600">+{{ $newEmployeesThisMonth }} this month</p>
                 </div>
                 <div class="rounded-xl bg-sky-100 p-3">
                     <i class="fas fa-users text-xl text-sky-700"></i>
@@ -77,6 +70,11 @@
             <div class="divide-y divide-slate-200">
                 @php
                     $attendanceStatus = [1 => 'Present', 2 => 'Late', 3 => 'Absent', 4 => 'Excused'];
+                    $attendanceClasses = [
+                        1 => 'bg-green-100 text-green-800',
+                        2 => 'bg-orange-100 text-orange-800',
+                        3 => 'bg-red-100 text-red-800',
+                    ];
                 @endphp
                 @forelse($todayAttendance as $attendance)
                     <div class="flex items-center justify-between px-6 py-4 transition hover:bg-slate-50/90">
@@ -87,12 +85,7 @@
                             </p>
                         </div>
                         @php $s = $attendance->status; @endphp
-                        <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium
-                            @if($s == 1) bg-green-100 text-green-800
-                            @elseif($s == 2) bg-orange-100 text-orange-800
-                            @elseif($s == 3) bg-red-100 text-red-800
-                            @else bg-slate-100 text-slate-800
-                            @endif">
+                        <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium {{ $attendanceClasses[$s] ?? 'bg-slate-100 text-slate-800' }}">
                             {{ $attendanceStatus[$s] ?? 'Unknown' }}
                         </span>
                     </div>

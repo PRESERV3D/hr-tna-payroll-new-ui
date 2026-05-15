@@ -16,13 +16,10 @@ class DashboardController extends Controller
     {
         // Total Employees (from employees table)
         $totalEmployees = Employee::where('status', 1)->count();
-        $newEmployeesThisMonth = Employee::where('status', 1)
-            ->whereMonth('hire_date', Carbon::now()->month)
-            ->whereYear('hire_date', Carbon::now()->year)
-            ->count();
 
-        // New Hires (Onboarding/probationary) from employees table
-        $newHires = Employee::where('status', 2)->count();
+        // New Hires: employees hired within the last 30 days
+        $newHires = Employee::whereBetween('hire_date', [Carbon::now()->subDays(30)->startOfDay(), Carbon::now()->endOfDay()])
+            ->count();
 
         // On Leave Today
         $today = Carbon::now()->toDateString();
@@ -56,7 +53,6 @@ class DashboardController extends Controller
 
         return view('dashboard', [
             'totalEmployees' => $totalEmployees,
-            'newEmployeesThisMonth' => $newEmployeesThisMonth,
             'newHires' => $newHires,
             'onLeaveToday' => $onLeaveToday,
             'leavesPendingApproval' => $leavesPendingApproval,
