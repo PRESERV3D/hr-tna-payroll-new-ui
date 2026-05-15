@@ -128,6 +128,13 @@
                         <span class="hidden whitespace-nowrap font-medium group-hover:inline">Payroll</span>
                     </a>
 
+                    <a href="{{ route('timekeeping.index') }}" class="flex w-full items-center rounded-xl px-3 py-3 text-slate-700 transition hover:bg-slate-200 hover:text-slate-900 {{ request()->routeIs('timekeeping.*') ? 'bg-slate-100 text-slate-800 shadow-sm ring-1 ring-slate-200' : '' }}">
+                        <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
+                            <i class="fas fa-clock text-base"></i>
+                        </span>
+                        <span class="hidden whitespace-nowrap font-medium group-hover:inline">Timekeeping</span>
+                    </a>
+
                     <details class="organization-menu rounded-xl">
                         <summary class="flex w-full cursor-pointer list-none items-center rounded-xl px-3 py-3 text-slate-700 transition hover:bg-slate-200 hover:text-slate-900 {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'bg-slate-100 text-slate-800 ring-1 ring-slate-200' : '' }}">
                             <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">

@@ -6,6 +6,7 @@ use App\Http\Controllers\DashboardController;
 use App\Http\Controllers\EmployeeController;
 use App\Http\Controllers\OrganizationController;
 use App\Http\Controllers\PayrollController;
+use App\Http\Controllers\TimekeepingController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -21,6 +22,7 @@ Route::middleware('guest')->group(function () {
 
 Route::middleware('auth')->group(function () {
     Route::get('/dashboard', [DashboardController::class, 'index'])->name('dashboard');
+    Route::get('/timekeeping', [TimekeepingController::class, 'index'])->name('timekeeping.index');
     Route::post('/logout', [LoginController::class, 'destroy'])->name('logout');
 
     Route::redirect('/organization', '/organization/departments');
