@@ -2,16 +2,18 @@
     <x-slot:title>Dashboard</x-slot:title>
     <x-slot:header>Dashboard</x-slot:header>
 
-    <div>
-        <h1 class="text-2xl font-semibold">Dashboard</h1>
-        <p class="text-sm text-slate-500">Overview of your workforce today.</p>
-    </div>
-
-    <div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
-        <div class="card p-5">
-            <p class="text-sm text-slate-500">Total employees</p>
-            <p class="mt-1 text-2xl font-semibold">{{ $totalEmployees }}</p>
-            <p class="mt-1 text-xs text-slate-400">+{{ $newEmployeesThisMonth }} this month</p>
+    <div class="grid gap-6 md:grid-cols-2 lg:grid-cols-4">
+        <!-- Total Employees Card -->
+        <div class="nw-panel rounded-2xl p-6 transition hover:-translate-y-0.5 hover:shadow-xl">
+            <div class="flex items-start justify-between">
+                <div>
+                    <p class="text-sm font-medium text-slate-500">Total Employees</p>
+                    <p class="mt-2 text-3xl font-extrabold text-slate-900">{{ $totalEmployees }}</p>
+                </div>
+                <div class="rounded-xl bg-sky-100 p-3">
+                    <i class="fas fa-users text-xl text-sky-700"></i>
+                </div>
+            </div>
         </div>
 
         <div class="card p-5">
@@ -39,14 +41,25 @@
                 <h2 class="font-medium">Attendance overview</h2>
                 <span class="text-xs text-slate-400">Today</span>
             </div>
-            <div class="divide-y divide-slate-100">
+            <div class="divide-y divide-slate-200">
+                @php
+                    $attendanceStatus = [1 => 'Present', 2 => 'Late', 3 => 'Absent', 4 => 'Excused'];
+                    $attendanceClasses = [
+                        1 => 'bg-green-100 text-green-800',
+                        2 => 'bg-orange-100 text-orange-800',
+                        3 => 'bg-red-100 text-red-800',
+                    ];
+                @endphp
                 @forelse($todayAttendance as $attendance)
                     <div class="flex items-center justify-between px-6 py-4">
                         <div>
                             <p class="font-medium">{{ $attendance->user->name }}</p>
                             <p class="text-sm text-slate-500">In: {{ $attendance->check_in ? $attendance->check_in->format('H:i') : '—' }} • Out: {{ $attendance->check_out ? $attendance->check_out->format('H:i') : '—' }}</p>
                         </div>
-                        <span class="badge badge-blue">{{ match($attendance->status) { 1 => 'Present', 2 => 'Late', 3 => 'Absent', default => 'Excused' } }}</span>
+                        @php $s = $attendance->status; @endphp
+                        <span class="inline-flex items-center rounded-full px-3 py-1 text-sm font-medium {{ $attendanceClasses[$s] ?? 'bg-slate-100 text-slate-800' }}">
+                            {{ $attendanceStatus[$s] ?? 'Unknown' }}
+                        </span>
                     </div>
                 @empty
                     <div class="px-6 py-8 text-center text-sm text-slate-500">No attendance records yet.</div>

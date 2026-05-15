@@ -174,16 +174,16 @@
 
     <div class="grid gap-6 sm:grid-cols-2">
         <div>
-            <label class="{{ $lbl }}" for="employee_code">Employee Code</label>
-            <input id="employee_code" name="employee_code" type="text" value="{{ old('employee_code', $employee->employee_code ?? '') }}" placeholder="e.g. EMP-0001" class="{{ $inp }}">
-            @error('employee_code')<p class="{{ $err }}">{{ $message }}</p>@enderror
-        </div>
-        <div>
             <label class="{{ $lbl }}" for="employment_type">Employment Type</label>
+            @php
+                // UI uses numeric codes; DB now stores integer codes for employment_type
+                $employmentOptions = [1 => 'Full-time', 2 => 'Part-time', 3 => 'Contractual', 4 => 'Intern'];
+                $selectedEmployment = old('employment_type', $employee->employment_type ?? '');
+            @endphp
             <select id="employment_type" name="employment_type" class="{{ $sel }}">
-                <option value="">Select type</option>
-                @foreach (['Full-time', 'Part-time', 'Contractual', 'Intern'] as $type)
-                    <option value="{{ $type }}" @selected(old('employment_type', $employee->employment_type ?? '') === $type)>{{ $type }}</option>
+                <option value="" disabled>Select type</option>
+                @foreach ($employmentOptions as $key => $label)
+                    <option value="{{ $key }}" @selected((string)$selectedEmployment === (string)$key)>{{ $label }}</option>
                 @endforeach
             </select>
             @error('employment_type')<p class="{{ $err }}">{{ $message }}</p>@enderror
@@ -222,10 +222,20 @@
         </div>
         <div>
             <label class="{{ $lbl }}" for="status">Employment Status <span class="text-red-500">*</span></label>
+            @php
+                $statusOptions = [
+                    1 => 'Active',
+                    2 => 'Probationary',
+                    3 => 'On Leave',
+                    4 => 'Resigned',
+                    5 => 'Terminated',
+                ];
+                $selectedStatus = old('status', $employee->status ?? '');
+            @endphp
             <select id="status" name="status" required class="{{ $sel }}">
                 <option value="" disabled selected>Select status</option>
-                @foreach (['Active', 'Probationary', 'On Leave', 'Resigned', 'Terminated'] as $status)
-                    <option value="{{ $status }}" @selected(old('status', $employee->status ?? '') === $status)>{{ $status }}</option>
+                @foreach ($statusOptions as $key => $label)
+                    <option value="{{ $key }}" @selected((string)$selectedStatus == (string)$key)>{{ $label }}</option>
                 @endforeach
             </select>
             @error('status')<p class="{{ $err }}">{{ $message }}</p>@enderror
@@ -304,10 +314,10 @@
     function isStepCompleted(stepNum) {
         // A step is only completed if it has been passed and has no error fields
         if (stepNum >= current) return false; // Future or current steps are not completed
-        
+
         const panel = document.querySelector(`.wizard-panel[data-panel="${stepNum}"]`);
         if (!panel) return false;
-        
+
         const errors = panel.querySelectorAll('[class*="text-red"]');
         return errors.length === 0; // Completed only if no errors
     }

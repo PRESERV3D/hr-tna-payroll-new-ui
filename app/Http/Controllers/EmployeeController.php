@@ -29,8 +29,9 @@ class EmployeeController extends Controller
     {
         $departments = Department::all();
         $positions = Position::all();
-        $managers = Employee::whereNotNull('manager_id')
-            ->orWhere('position_id', 'LIKE', '%Manager%')
+        // Only list active, full-time employees as possible managers
+        $managers = Employee::where('status', 1)
+            ->where('employment_type', 1)
             ->get();
 
         return view('employees.create', compact('departments', 'positions', 'managers'));
@@ -42,7 +43,6 @@ class EmployeeController extends Controller
     public function store(Request $request): RedirectResponse
     {
         $validated = $request->validate([
-            'employee_code' => ['required', 'string', 'unique:employees'],
             'first_name' => ['required', 'string', 'max:80'],
             'last_name' => ['required', 'string', 'max:80'],
             'middle_name' => ['nullable', 'string', 'max:80'],
@@ -58,9 +58,10 @@ class EmployeeController extends Controller
             'province' => ['nullable', 'string', 'max:100'],
             'postal_code' => ['nullable', 'string', 'max:20'],
             'country' => ['nullable', 'string', 'max:80'],
-            'employment_type' => ['required', 'in:Full-time,Part-time,Contractual,Intern'],
-            // status codes: 1=Active, 2=Probationary, 3=On Leave, 4=Resigned/Terminated
-            'status' => ['required', 'in:1,2,3,4'],
+            // employment_type submitted as numeric codes: 1=Full-time,2=Part-time,3=Contract,4=Temporary
+            'employment_type' => ['required', 'in:1,2,3,4'],
+            // status codes: 1=Active, 2=Probationary, 3=On Leave, 4=Resigned, 5=Terminated
+            'status' => ['required', 'in:1,2,3,4,5'],
             'hire_date' => ['required', 'date'],
             'regularization_date' => ['nullable', 'date'],
             'termination_date' => ['nullable', 'date'],
@@ -70,7 +71,16 @@ class EmployeeController extends Controller
             'manager_id' => ['nullable', 'exists:employees,id'],
         ]);
 
-        Employee::create($validated);
+        $validated['employee_code'] = $this->generateTemporaryEmployeeCode();
+
+        $employee = Employee::create($validated);
+        $employee->update([
+            'employee_code' => $this->generateEmployeeCode(
+                $employee->first_name,
+                $employee->last_name,
+                $employee->id,
+            ),
+        ]);
 
         return redirect()->route('employees.index')
             ->with('success', 'Employee created successfully.');
@@ -101,7 +111,11 @@ class EmployeeController extends Controller
     {
         $departments = Department::all();
         $positions = Position::all();
-        $managers = Employee::where('id', '!=', $employee->id)->get();
+        // Exclude the employee being edited; only active full-time employees
+        $managers = Employee::where('id', '!=', $employee->id)
+            ->where('status', 1)
+            ->where('employment_type', 1)
+            ->get();
 
         return view('employees.edit', compact('employee', 'departments', 'positions', 'managers'));
     }
@@ -112,7 +126,6 @@ class EmployeeController extends Controller
     public function update(Request $request, Employee $employee): RedirectResponse
     {
         $validated = $request->validate([
-            'employee_code' => ['required', 'string', 'unique:employees,employee_code,' . $employee->id],
             'first_name' => ['required', 'string', 'max:80'],
             'last_name' => ['required', 'string', 'max:80'],
             'middle_name' => ['nullable', 'string', 'max:80'],
@@ -128,9 +141,10 @@ class EmployeeController extends Controller
             'province' => ['nullable', 'string', 'max:100'],
             'postal_code' => ['nullable', 'string', 'max:20'],
             'country' => ['nullable', 'string', 'max:80'],
-            'employment_type' => ['required', 'in:Full-time,Part-time,Contractual,Intern'],
-            // status codes: 1=Active, 2=Probationary, 3=On Leave, 4=Resigned/Terminated
-            'status' => ['required', 'in:1,2,3,4'],
+            // employment_type submitted as numeric codes: 1=Full-time,2=Part-time,3=Contract,4=Temporary
+            'employment_type' => ['required', 'in:1,2,3,4'],
+            // status codes: 1=Active, 2=Probationary, 3=On Leave, 4=Resigned, 5=Terminated
+            'status' => ['required', 'in:1,2,3,4,5'],
             'hire_date' => ['required', 'date'],
             'regularization_date' => ['nullable', 'date'],
             'termination_date' => ['nullable', 'date'],
@@ -155,5 +169,24 @@ class EmployeeController extends Controller
 
         return redirect()->route('employees.index')
             ->with('success', 'Employee deleted successfully.');
+    }
+
+    /**
+     * Generate an employee code from initials and the record id.
+     */
+    private function generateEmployeeCode(string $firstName, string $lastName, int $id): string
+    {
+        $firstInitial = strtoupper(substr(trim($firstName), 0, 1));
+        $lastInitial = strtoupper(substr(trim($lastName), 0, 1));
+
+        return $firstInitial . $lastInitial . str_pad((string) $id, 3, '0', STR_PAD_LEFT);
+    }
+
+    /**
+     * Generate a temporary unique employee code for the initial insert.
+     */
+    private function generateTemporaryEmployeeCode(): string
+    {
+        return 'TMP' . now()->format('YmdHis') . random_int(1000, 9999);
     }
 }

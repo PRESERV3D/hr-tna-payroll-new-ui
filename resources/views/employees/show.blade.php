@@ -31,8 +31,23 @@
                 <div class="flex justify-between gap-4"><dt class="text-slate-500">Department</dt><dd class="font-medium text-slate-900">{{ $employee->department->name ?? 'N/A' }}</dd></div>
                 <div class="flex justify-between gap-4"><dt class="text-slate-500">Position</dt><dd class="font-medium text-slate-900">{{ $employee->position->title ?? 'N/A' }}</dd></div>
                 <div class="flex justify-between gap-4"><dt class="text-slate-500">Manager</dt><dd class="font-medium text-slate-900">{{ $employee->manager?->full_name ?? 'N/A' }}</dd></div>
-                <div class="flex justify-between gap-4"><dt class="text-slate-500">Employment Type</dt><dd class="font-medium text-slate-900">{{ $employee->employment_type }}</dd></div>
-                <div class="flex justify-between gap-4"><dt class="text-slate-500">Status</dt><dd class="font-medium text-slate-900">{{ $employee->status }}</dd></div>
+                <div class="flex justify-between gap-4">
+                    <dt class="text-slate-500">Employment Type</dt>
+                    @php
+                        $empLabels = [1 => 'Full-time', 2 => 'Part-time', 3 => 'Contractual', 4 => 'Intern'];
+                        $empCode = (int) ($employee->employment_type ?? 0);
+                        $empLabel = $empLabels[$empCode] ?? ($employee->employment_type ?? 'N/A');
+                    @endphp
+                    <dd class="font-medium text-slate-900">{{ $empLabel }}</dd>
+                </div>
+                <div class="flex justify-between gap-4">
+                    <dt class="text-slate-500">Status</dt>
+                    @php
+                        $statusLabels = [1 => 'Active', 2 => 'Probationary', 3 => 'On Leave', 4 => 'Resigned', 5 => 'Terminated'];
+                        $statusLabel = $statusLabels[$employee->status] ?? $employee->status;
+                    @endphp
+                    <dd class="font-medium text-slate-900">{{ $statusLabel }}</dd>
+                </div>
                 <div class="flex justify-between gap-4"><dt class="text-slate-500">Hire Date</dt><dd class="font-medium text-slate-900">{{ $employee->hire_date?->format('Y-m-d') ?? 'N/A' }}</dd></div>
             </dl>
         </div>
