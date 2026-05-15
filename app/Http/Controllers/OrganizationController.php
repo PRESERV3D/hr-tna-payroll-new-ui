@@ -41,14 +41,14 @@ class OrganizationController extends Controller
 
         Department::create($validated);
 
-        return redirect()->route('organization.index')->with('success', 'Department created successfully.');
+        return redirect()->route('organization.departments.index')->with('success', 'Department created successfully.');
     }
 
     public function destroyDepartment(Department $department): RedirectResponse
     {
         $department->delete();
 
-        return redirect()->route('organization.index')->with('success', 'Department deleted successfully.');
+        return redirect()->route('organization.departments.index')->with('success', 'Department deleted successfully.');
     }
 
     public function storePosition(Request $request): RedirectResponse
@@ -63,13 +63,13 @@ class OrganizationController extends Controller
 
         Position::create($validated);
 
-        return redirect()->route('organization.index')->with('success', 'Position created successfully.');
+        return redirect()->route('organization.positions.index')->with('success', 'Position created successfully.');
     }
 
     public function destroyPosition(Position $position): RedirectResponse
     {
         $position->delete();
 
-        return redirect()->route('organization.index')->with('success', 'Position deleted successfully.');
+        return redirect()->route('organization.positions.index')->with('success', 'Position deleted successfully.');
     }
 }
