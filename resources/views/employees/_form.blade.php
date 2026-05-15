@@ -222,10 +222,20 @@
         </div>
         <div>
             <label class="{{ $lbl }}" for="status">Employment Status <span class="text-red-500">*</span></label>
+            @php
+                $statusOptions = [
+                    1 => 'Active',
+                    2 => 'Probationary',
+                    3 => 'On Leave',
+                    4 => 'Resigned',
+                    5 => 'Terminated',
+                ];
+                $selectedStatus = old('status', $employee->status ?? '');
+            @endphp
             <select id="status" name="status" required class="{{ $sel }}">
                 <option value="" disabled selected>Select status</option>
-                @foreach (['Active', 'Probationary', 'On Leave', 'Resigned', 'Terminated'] as $status)
-                    <option value="{{ $status }}" @selected(old('status', $employee->status ?? '') === $status)>{{ $status }}</option>
+                @foreach ($statusOptions as $key => $label)
+                    <option value="{{ $key }}" @selected((string)$selectedStatus == (string)$key)>{{ $label }}</option>
                 @endforeach
             </select>
             @error('status')<p class="{{ $err }}">{{ $message }}</p>@enderror
@@ -304,10 +314,10 @@
     function isStepCompleted(stepNum) {
         // A step is only completed if it has been passed and has no error fields
         if (stepNum >= current) return false; // Future or current steps are not completed
-        
+
         const panel = document.querySelector(`.wizard-panel[data-panel="${stepNum}"]`);
         if (!panel) return false;
-        
+
         const errors = panel.querySelectorAll('[class*="text-red"]');
         return errors.length === 0; // Completed only if no errors
     }

@@ -54,15 +54,21 @@
                             <td class="px-6 py-4 text-sm text-slate-600">{{ $employee->department->name ?? 'N/A' }}</td>
                             <td class="px-6 py-4 text-sm text-slate-600">{{ $employee->position->title ?? 'N/A' }}</td>
                             <td class="px-6 py-4">
-                                <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold
-                                    @if ($employee->status === 'Active') bg-green-100 text-green-800
-                                    @elseif ($employee->status === 'Probationary') bg-blue-100 text-blue-800
-                                    @elseif ($employee->status === 'On Leave') bg-yellow-100 text-yellow-800
-                                    @elseif ($employee->status === 'Resigned') bg-gray-100 text-gray-800
-                                    @elseif ($employee->status === 'Terminated') bg-red-100 text-red-800
-                                    @endif
-                                ">
-                                    {{ $employee->status }}
+                                @php
+                                    $statusLabels = [1 => 'Active', 2 => 'Probationary', 3 => 'On Leave', 4 => 'Resigned', 5 => 'Terminated'];
+                                    $statusColors = [
+                                        1 => 'bg-green-100 text-green-800',
+                                        2 => 'bg-blue-100 text-blue-800',
+                                        3 => 'bg-yellow-100 text-yellow-800',
+                                        4 => 'bg-gray-100 text-gray-800',
+                                        5 => 'bg-red-100 text-red-800',
+                                    ];
+                                    $st = $employee->status;
+                                    $label = $statusLabels[$st] ?? $st;
+                                    $color = $statusColors[$st] ?? '';
+                                @endphp
+                                <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold {{ $color }}">
+                                    {{ $label }}
                                 </span>
                             </td>
                             <td class="px-6 py-4 text-sm">
