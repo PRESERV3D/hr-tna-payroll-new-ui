@@ -9,6 +9,27 @@
     <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
+    <style>
+        details.organization-menu > .organization-submenu {
+            display: none;
+        }
+
+        details.organization-menu[open] > .organization-submenu {
+            display: block;
+        }
+
+        details.organization-menu .organization-arrow {
+            transition: transform 300ms ease;
+        }
+
+        details.organization-menu[open] .organization-arrow {
+            transform: rotate(180deg);
+        }
+
+        details.organization-menu > summary::-webkit-details-marker {
+            display: none;
+        }
+    </style>
     {{ $head ?? '' }}
 </head>
 <body class="min-h-screen font-sans text-slate-900">
