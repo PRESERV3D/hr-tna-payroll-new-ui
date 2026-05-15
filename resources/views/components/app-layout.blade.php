@@ -23,23 +23,23 @@
             overflow-x: hidden;
         }
 
-        details.organization-menu > .organization-submenu {
+        details > .organization-submenu {
             display: none;
         }
 
-        details.organization-menu[open] > .organization-submenu {
+        details[open] > .organization-submenu {
             display: block;
         }
 
-        details.organization-menu .organization-arrow {
+        details .organization-arrow {
             transition: transform 300ms ease;
         }
 
-        details.organization-menu[open] .organization-arrow {
+        details[open] .organization-arrow {
             transform: rotate(180deg);
         }
 
-        details.organization-menu > summary::-webkit-details-marker {
+        details > summary::-webkit-details-marker {
             display: none;
         }
 
@@ -58,22 +58,22 @@
 <body class="min-h-screen font-sans text-slate-900">
     <div class="flex min-h-screen bg-transparent">
         <!-- Sidebar -->
-        <aside class="sidebar group fixed left-0 top-0 z-40 flex h-screen flex-col overflow-hidden border-r border-slate-800 bg-slate-950/95 p-3 text-slate-200 transition-[width,padding] duration-300 ease-in-out">
+        <aside class="sidebar group fixed left-0 top-0 z-40 flex h-screen flex-col overflow-hidden border-r border-slate-200 bg-white p-3 text-slate-700 transition-[width,padding] duration-300 ease-in-out">
             <div class="flex flex-1 flex-col overflow-y-auto pb-4">
-                <div class="mb-6 flex items-center gap-3 rounded-2xl bg-slate-900/70 p-3">
-                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-500/20 text-sky-300">
+                <div class="mb-6 flex items-center gap-3 rounded-2xl bg-sky-50 p-3">
+                    <div class="flex h-10 w-10 shrink-0 items-center justify-center rounded-xl bg-sky-100 text-sky-600">
                         <i class="fas fa-briefcase text-base"></i>
                     </div>
                     <div class="hidden min-w-0 whitespace-nowrap group-hover:block">
-                        <p class="text-sm font-semibold tracking-wide text-slate-100">Northwind HR</p>
-                        <p class="text-xs text-slate-400">People Platform</p>
+                        <p class="text-sm font-semibold tracking-wide text-slate-900">Northwind HR</p>
+                        <p class="text-xs text-slate-500">People Platform</p>
                     </div>
                 </div>
 
                 <!-- Navigation -->
                 <nav class="space-y-2">
                     <p class="hidden px-3 pb-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 group-hover:block">Overview</p>
-                    <a href="{{ route('dashboard') }}" class="flex items-center justify-start gap-3 rounded-xl px-3 py-3 text-slate-200 transition hover:bg-slate-800/90 {{ request()->routeIs('dashboard') ? 'bg-slate-800 text-white shadow-lg shadow-slate-950/30' : '' }}">
+                    <a href="{{ route('dashboard') }}" class="flex items-center justify-start gap-3 rounded-xl px-3 py-3 text-slate-700 transition hover:bg-slate-100 {{ request()->routeIs('dashboard') ? 'bg-sky-100 text-sky-700 shadow-lg shadow-sky-200/30' : '' }}">
                         <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
                             <i class="fas fa-home text-base"></i>
                         </span>
@@ -82,38 +82,38 @@
 
                     <p class="hidden px-3 pt-3 pb-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500 group-hover:block">Modules</p>
 
-                    <a href="{{ route('employees.index') }}" class="flex items-center justify-start gap-3 rounded-xl px-3 py-3 text-slate-200 transition hover:bg-slate-800/90 {{ request()->routeIs('employees.*') ? 'bg-slate-800 text-white shadow-lg shadow-slate-950/30' : '' }}">
+                    <a href="{{ route('employees.index') }}" class="flex items-center justify-start gap-3 rounded-xl px-3 py-3 text-slate-700 transition hover:bg-slate-100 {{ request()->routeIs('employees.*') ? 'bg-sky-100 text-sky-700 shadow-lg shadow-sky-200/30' : '' }}">
                         <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
                             <i class="fas fa-user text-base"></i>
                         </span>
                         <span class="hidden whitespace-nowrap font-medium group-hover:inline">Employees</span>
                     </a>
 
-                    <a href="{{ route('payroll.index') }}" class="flex items-center justify-start gap-3 rounded-xl px-3 py-3 text-slate-200 transition hover:bg-slate-800/90 {{ request()->routeIs('payroll.*') ? 'bg-slate-800 text-white shadow-lg shadow-slate-950/30' : '' }}">
+                    <a href="{{ route('payroll.index') }}" class="flex items-center justify-start gap-3 rounded-xl px-3 py-3 text-slate-700 transition hover:bg-slate-100 {{ request()->routeIs('payroll.*') ? 'bg-sky-100 text-sky-700 shadow-lg shadow-sky-200/30' : '' }}">
                         <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
                             <i class="fas fa-money-bill text-base"></i>
                         </span>
                         <span class="hidden whitespace-nowrap font-medium group-hover:inline">Payroll</span>
                     </a>
 
-                    <details class="rounded-xl {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'bg-slate-900/60' : '' }}" {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'open' : '' }}>
-                        <summary class="flex cursor-pointer list-none items-center justify-start gap-3 rounded-xl px-3 py-3 text-slate-200 transition hover:bg-slate-800/90">
+                    <details class="group" {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'open' : '' }}>
+                        <summary class="flex cursor-pointer list-none items-center justify-start gap-3 px-3 py-3 text-slate-700 transition hover:bg-slate-100">
                             <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
                                 <i class="fas fa-building text-base"></i>
                             </span>
                             <span class="hidden flex-1 whitespace-nowrap font-medium group-hover:block">Organization</span>
-                            <span class="hidden text-xs text-slate-400 group-hover:block">▼</span>
+                            <span class="hidden organization-arrow inline-flex items-center text-xs text-slate-500 transition-transform duration-300 group-hover:block">
+                            <i class="fas fa-chevron-down"></i>
+                        </span>
                         </summary>
 
-                        <div class="mx-3 mb-2 mt-1 hidden space-y-1 rounded-xl border border-slate-800 bg-slate-900/80 p-2 group-hover:block">
-                            <a href="{{ route('organization.departments.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('organization.departments.*') ? 'bg-slate-800' : '' }}">
-                                <i class="fas fa-chart-bar text-xs"></i>
-                                <span>Departments</span>
+                        <div class="ml-3 mt-1 hidden space-y-0 border-l-2 border-sky-400 bg-sky-50/50 py-2 pl-3 pr-3 group-hover:block">
+                            <a href="{{ route('organization.departments.index') }}" class="block px-4 py-2 text-sm text-slate-600 transition hover:text-slate-900 {{ request()->routeIs('organization.departments.*') ? 'text-sky-700 font-semibold' : '' }}">
+                                Departments
                             </a>
 
-                            <a href="{{ route('organization.positions.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('organization.positions.*') ? 'bg-slate-800' : '' }}">
-                                <i class="fas fa-cog text-xs"></i>
-                                <span>Positions</span>
+                            <a href="{{ route('organization.positions.index') }}" class="block px-4 py-2 text-sm text-slate-600 transition hover:text-slate-900 {{ request()->routeIs('organization.positions.*') ? 'text-sky-700 font-semibold' : '' }}">
+                                Positions
                             </a>
                         </div>
                     </details>
@@ -124,7 +124,7 @@
             <div class="mt-auto pt-4">
                 <form method="POST" action="{{ route('logout') }}" class="w-full">
                     @csrf
-                    <button type="submit" class="flex w-full items-center justify-start gap-3 rounded-xl border border-slate-700/80 bg-slate-900/70 px-3 py-3 text-slate-200 transition hover:bg-slate-800">
+                    <button type="submit" class="flex w-full items-center justify-start gap-3 rounded-xl border border-slate-200 bg-slate-100 px-3 py-3 text-slate-700 transition hover:bg-slate-200">
                         <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                             <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
                         </svg>
