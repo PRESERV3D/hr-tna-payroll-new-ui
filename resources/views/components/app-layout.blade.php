@@ -4,145 +4,110 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>{{ $title ?? 'HR System' }}</title>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     @vite(['resources/css/app.css', 'resources/js/app.js'])
     <style>
-        details.organization-menu > .organization-submenu {
+        :root {
+            --primary: #4f46e5;
+            --bg: #f8fafc;
+            --muted: #f1f5f9;
+            --border: #e2e8f0;
+            --fg: #0f172a;
+            --muted-fg: #64748b;
+        }
+        body { background: var(--bg); color: var(--fg); font-family: ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, sans-serif; }
+        .card { background: #fff; border: 1px solid var(--border); border-radius: 12px; }
+        .btn-primary { background: var(--primary); color: #fff; padding: .5rem 1rem; border-radius: 8px; font-size: .875rem; font-weight: 500; }
+        .btn-outline { border: 1px solid var(--border); padding: .5rem 1rem; border-radius: 8px; font-size: .875rem; background: #fff; }
+        .nav-link { display: flex; align-items: center; gap: .625rem; padding: .5rem .75rem; border-radius: 8px; color: var(--muted-fg); font-size: .875rem; }
+        .nav-link:hover { background: var(--muted); color: var(--fg); }
+        .nav-link.active { background: #eef2ff; color: var(--primary); font-weight: 500; }
+        .badge { display: inline-flex; align-items: center; padding: .125rem .5rem; border-radius: 9999px; font-size: .75rem; font-weight: 500; }
+        .badge-green { background: #dcfce7; color: #166534; }
+        .badge-amber { background: #fef3c7; color: #92400e; }
+        .badge-red { background: #fee2e2; color: #991b1b; }
+        .badge-blue { background: #dbeafe; color: #1e40af; }
+        .badge-gray { background: #f1f5f9; color: #475569; }
+        .sidebar-toggle {
+            width: 2rem;
+            height: 2rem;
+            padding: 0;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 0.5rem;
+        }
+        .sidebar-shell {
+            width: 15rem;
+            transition: width 180ms ease;
+        }
+        .sidebar-collapsed .sidebar-shell {
+            width: 4.75rem;
+        }
+        .sidebar-collapsed .sidebar-brand-text,
+        .sidebar-collapsed .sidebar-group-label,
+        .sidebar-collapsed .sidebar-nav-label,
+        .sidebar-collapsed .sidebar-user-text {
             display: none;
         }
-
-        details.organization-menu[open] > .organization-submenu {
-            display: block;
-        }
-
-        details.organization-menu .organization-arrow {
-            transition: transform 300ms ease;
-        }
-
-        details.organization-menu[open] .organization-arrow {
-            transform: rotate(180deg);
-        }
-
-        details.organization-menu > summary::-webkit-details-marker {
-            display: none;
+        .sidebar-collapsed .sidebar-nav-link {
+            justify-content: center;
+            gap: 0;
         }
     </style>
-    {{ $head ?? '' }}
 </head>
-<body class="min-h-screen font-sans text-slate-900">
-    <div class="flex min-h-screen bg-transparent">
-        <!-- Sidebar -->
-        <aside class="sidebar fixed left-0 top-0 z-40 h-screen w-72 overflow-y-auto border-r border-slate-800 bg-slate-950/95 p-5 text-slate-200">
-            <div class="mb-6 flex items-center gap-3 rounded-2xl bg-slate-900/70 p-3">
-                <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-300">
-                    <i class="fas fa-briefcase text-base"></i>
-                </div>
-                <div>
-                    <p class="text-sm font-semibold tracking-wide text-slate-100">Northwind HR</p>
-                    <p class="text-xs text-slate-400">People Platform</p>
-                </div>
+<body>
+    @php
+        $nav = [
+            ['route' => 'dashboard', 'label' => 'Dashboard', 'group' => 'Overview', 'icon' => 'home'],
+            ['route' => 'employees.index', 'label' => 'Employees', 'group' => 'Modules', 'icon' => 'users'],
+            ['route' => 'organization.departments.index', 'label' => 'Organization', 'group' => 'Modules', 'icon' => 'building'],
+            ['route' => 'onboarding', 'label' => 'Onboarding', 'group' => 'Modules', 'icon' => 'user-plus'],
+            ['route' => 'timekeeping', 'label' => 'Timekeeping', 'group' => 'Modules', 'icon' => 'clock'],
+            ['route' => 'leave', 'label' => 'Leave', 'group' => 'Modules', 'icon' => 'calendar'],
+            ['route' => 'payroll.index', 'label' => 'Payroll', 'group' => 'Modules', 'icon' => 'wallet'],
+            ['route' => 'benefits', 'label' => 'Benefits', 'group' => 'Modules', 'icon' => 'shield-heart'],
+            ['route' => 'self-service', 'label' => 'Self-Service', 'group' => 'Modules', 'icon' => 'address-card'],
+            ['route' => 'reports', 'label' => 'Reports', 'group' => 'Modules', 'icon' => 'chart-column'],
+        ];
+        $groups = collect($nav)->groupBy('group');
+    @endphp
+
+    <div class="min-h-screen flex w-full" id="app-shell">
+        <aside class="sidebar-shell shrink-0 border-r border-slate-200 bg-white p-4 hidden md:block">
+            <div class="flex items-center justify-start px-2 py-1">
+                <button id="sidebar-collapse-toggle" class="btn-outline sidebar-toggle" type="button" aria-label="Collapse sidebar" aria-pressed="false">
+                    <i id="sidebar-collapse-icon" class="fa-solid fa-angles-left text-xs"></i>
+                </button>
             </div>
-
-            <!-- Navigation -->
-            <nav class="space-y-2">
-                <p class="px-3 pb-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Overview</p>
-                <a href="{{ route('dashboard') }}" class="flex items-center gap-3 rounded-xl px-3 py-3 text-slate-200 transition hover:bg-slate-800/90 {{ request()->routeIs('dashboard') ? 'bg-slate-800 text-white shadow-lg shadow-slate-950/30' : '' }}">
-                    <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
-                        <i class="fas fa-home text-base"></i>
-                    </span>
-                    <span class="whitespace-nowrap font-medium">Dashboard</span>
-                </a>
-
-                <p class="px-3 pt-3 pb-2 text-xs font-semibold uppercase tracking-[0.16em] text-slate-500">Modules</p>
-
-                <a href="{{ route('employees.index') }}" class="flex items-center gap-3 rounded-xl px-3 py-3 text-slate-200 transition hover:bg-slate-800/90 {{ request()->routeIs('employees.*') ? 'bg-slate-800 text-white shadow-lg shadow-slate-950/30' : '' }}">
-                    <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
-                        <i class="fas fa-user text-base"></i>
-                    </span>
-                    <span class="whitespace-nowrap font-medium">Employees</span>
-                </a>
-
-                <a href="{{ route('payroll.index') }}" class="flex items-center gap-3 rounded-xl px-3 py-3 text-slate-200 transition hover:bg-slate-800/90 {{ request()->routeIs('payroll.*') ? 'bg-slate-800 text-white shadow-lg shadow-slate-950/30' : '' }}">
-                    <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
-                        <i class="fas fa-money-bill text-base"></i>
-                    </span>
-                    <span class="whitespace-nowrap font-medium">Payroll</span>
-                </a>
-
-                <details class="rounded-xl {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'bg-slate-900/60' : '' }}" {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'open' : '' }}>
-                    <summary class="flex cursor-pointer list-none items-center gap-3 rounded-xl px-3 py-3 text-slate-200 transition hover:bg-slate-800/90">
-                        <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
-                            <i class="fas fa-building text-base"></i>
-                        </span>
-                        <span class="flex-1 whitespace-nowrap font-medium">Organization</span>
-                        <span class="text-xs text-slate-400">▼</span>
-                    </summary>
-
-                    <div class="mx-3 mb-2 mt-1 space-y-1 rounded-xl border border-slate-800 bg-slate-900/80 p-2">
-                        <a href="{{ route('organization.departments.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('organization.departments.*') ? 'bg-slate-800' : '' }}">
-                            <i class="fas fa-chart-bar text-xs"></i>
-                            <span>Departments</span>
-                        </a>
-
-                        <a href="{{ route('organization.positions.index') }}" class="flex items-center gap-3 rounded-lg px-3 py-2 text-sm text-slate-200 transition hover:bg-slate-800 {{ request()->routeIs('organization.positions.*') ? 'bg-slate-800' : '' }}">
-                            <i class="fas fa-cog text-xs"></i>
-                            <span>Positions</span>
-                        </a>
-                    </div>
-                </details>
-            </nav>
-
-            <!-- User Menu -->
-            <div class="mt-8 border-t border-slate-800 pt-4">
-                <div class="mb-3 rounded-xl bg-slate-900/70 p-3">
-                    <p class="text-sm font-semibold text-slate-100">{{ auth()->user()->name }}</p>
-                    <p class="text-xs lowercase text-slate-400">{{ auth()->user()->email }}</p>
+            @foreach ($groups as $groupName => $items)
+                <div class="mt-4">
+                    <p class="sidebar-group-label px-3 text-xs font-medium uppercase tracking-wide text-slate-400 mb-1">{{ $groupName }}</p>
+                    <nav class="space-y-1">
+                        @foreach ($items as $item)
+                            <a href="{{ route($item['route']) }}" class="nav-link sidebar-nav-link {{ request()->routeIs($item['route']) ? 'active' : '' }}">
+                                <span class="w-4 shrink-0 text-center"><i class="fas fa-{{ $item['icon'] }}"></i></span>
+                                <span class="sidebar-nav-label">{{ $item['label'] }}</span>
+                            </a>
+                        @endforeach
+                    </nav>
                 </div>
-                <form method="POST" action="{{ route('logout') }}" class="w-full">
-                    @csrf
-                    <button type="submit" class="flex w-full items-center gap-3 rounded-xl border border-slate-700/80 bg-slate-900/70 px-3 py-3 text-slate-200 transition hover:bg-slate-800">
-                        <svg class="h-6 w-6 shrink-0" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17 16l4-4m0 0l-4-4m4 4H7m6 4v1a3 3 0 01-3 3H6a3 3 0 01-3-3V7a3 3 0 013-3h4a3 3 0 013 3v1"></path>
-                        </svg>
-                        <span class="whitespace-nowrap font-medium">Logout</span>
-                    </button>
-                </form>
-            </div>
+            @endforeach
         </aside>
 
-        <!-- Main Content -->
-        <main class="ml-72 flex-1 overflow-y-auto">
-            <!-- Top Bar -->
-            <div class="sticky top-0 z-20 border-b border-slate-200/80 bg-white/85 px-8 py-5 backdrop-blur-md">
-                <div class="flex items-center justify-between">
-                    <div>
-                        <p class="text-xs font-semibold uppercase tracking-[0.16em] text-slate-400">Workspace</p>
-                        <h1 class="text-3xl font-extrabold text-slate-900">{{ $header ?? '' }}</h1>
-                    </div>
-                    <div class="flex items-center gap-3">
-                        <div class="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm lg:flex">
-                            <i class="fas fa-search text-xs text-slate-400"></i>
-                            <span class="text-sm text-slate-500">Search...</span>
-                        </div>
-                        <button class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-50" type="button" aria-label="Notifications">
-                            <i class="fas fa-bell text-sm"></i>
-                        </button>
-                        <div class="inline-flex h-10 w-10 items-center justify-center rounded-xl bg-sky-100 text-sm font-bold text-sky-700">
-                            {{ strtoupper(substr(auth()->user()->name, 0, 1)) }}
-                        </div>
-                    </div>
+        <div class="flex-1 flex flex-col min-w-0">
+            <header class="h-14 flex items-center justify-between border-b border-slate-200 bg-white px-6">
+                <div class="flex items-center gap-3 min-w-0">
+                    <input type="search" placeholder="Search..." class="w-72 max-w-sm rounded-lg border border-slate-200 bg-slate-50 px-3 py-1.5 text-sm focus:outline-none focus:ring-2 focus:ring-indigo-200" />
                 </div>
-            </div>
+                <div class="flex items-center gap-3">
+                    <button class="btn-outline text-sm" type="button">🔔</button>
+                    <div class="h-8 w-8 rounded-full bg-indigo-100 text-indigo-700 flex items-center justify-center text-sm font-semibold">{{ strtoupper(substr(auth()->user()->name, 0, 2)) }}</div>
+                </div>
+            </header>
 
-            <!-- Page Content -->
-            <div class="p-8">
-                {{ $slot }}
-            </div>
-        </main>
+            <main class="flex-1 p-6 space-y-6">{{ $slot }}</main>
+        </div>
     </div>
-    {{ $scripts ?? '' }}
 </body>
 </html>
