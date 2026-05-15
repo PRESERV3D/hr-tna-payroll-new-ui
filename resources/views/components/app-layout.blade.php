@@ -35,8 +35,9 @@
 <body class="min-h-screen font-sans text-slate-900">
     <div class="flex min-h-screen bg-transparent">
         <!-- Sidebar -->
-        <aside class="sidebar fixed left-0 top-0 z-40 h-screen w-72 overflow-y-auto border-r border-slate-800 bg-slate-950/95 p-5 text-slate-200">
-            <div class="mb-6 flex items-center gap-3 rounded-2xl bg-slate-900/70 p-3">
+        <aside class="sidebar fixed left-0 top-0 z-40 h-screen w-72 flex flex-col border-r border-slate-800 bg-slate-950/95 p-5 text-slate-200">
+            <div class="overflow-y-auto flex-1 pb-6">
+                <div class="mb-6 flex items-center gap-3 rounded-2xl bg-slate-900/70 p-3">
                 <div class="flex h-10 w-10 items-center justify-center rounded-xl bg-sky-500/20 text-sky-300">
                     <i class="fas fa-briefcase text-base"></i>
                 </div>
@@ -95,12 +96,9 @@
                 </details>
             </nav>
 
-            <!-- User Menu -->
-            <div class="mt-8 border-t border-slate-800 pt-4">
-                <div class="mb-3 rounded-xl bg-slate-900/70 p-3">
-                    <p class="text-sm font-semibold text-slate-100">{{ auth()->user()->name }}</p>
-                    <p class="text-xs lowercase text-slate-400">{{ auth()->user()->email }}</p>
-                </div>
+            </div>
+            <!-- Footer: logout pinned to bottom -->
+            <div class="mt-auto">
                 <form method="POST" action="{{ route('logout') }}" class="w-full">
                     @csrf
                     <button type="submit" class="flex w-full items-center gap-3 rounded-xl border border-slate-700/80 bg-slate-900/70 px-3 py-3 text-slate-200 transition hover:bg-slate-800">
