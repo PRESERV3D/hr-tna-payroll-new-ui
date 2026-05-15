@@ -41,6 +41,7 @@
                         <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Email</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Department</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Position</th>
+                        <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Employment Type</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Status</th>
                         <th class="px-6 py-3 text-left text-xs font-semibold uppercase tracking-wider text-slate-700">Actions</th>
                     </tr>
@@ -53,6 +54,16 @@
                             <td class="px-6 py-4 text-sm text-slate-600">{{ $employee->email }}</td>
                             <td class="px-6 py-4 text-sm text-slate-600">{{ $employee->department->name ?? 'N/A' }}</td>
                             <td class="px-6 py-4 text-sm text-slate-600">{{ $employee->position->title ?? 'N/A' }}</td>
+                            <td class="px-6 py-4">
+                                @php
+                                    $empLabels = [1 => 'Full-time', 2 => 'Part-time', 3 => 'Contractual', 4 => 'Intern'];
+                                    $empColors = [1 => 'bg-green-100 text-green-800', 2 => 'bg-blue-100 text-blue-800', 3 => 'bg-yellow-100 text-yellow-800', 4 => 'bg-gray-100 text-gray-800'];
+                                    $code = (int) ($employee->employment_type ?? 0);
+                                    $label = $empLabels[$code] ?? 'N/A';
+                                    $color = $empColors[$code] ?? '';
+                                @endphp
+                                <span class="inline-flex items-center gap-1 rounded-full px-2.5 py-1 text-xs font-semibold {{ $color }}">{{ $label }}</span>
+                            </td>
                             <td class="px-6 py-4">
                                 @php
                                     $statusLabels = [1 => 'Active', 2 => 'Probationary', 3 => 'On Leave', 4 => 'Resigned', 5 => 'Terminated'];
