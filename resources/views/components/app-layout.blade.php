@@ -23,12 +23,11 @@
             overflow-x: hidden;
         }
 
-        details.organization-menu > .organization-submenu {
+        details > .organization-submenu {
             display: none;
         }
 
-        /* show submenu when details is open and add a vertical line before the texts */
-        details.organization-menu[open] > .organization-submenu {
+        details[open] > .organization-submenu {
             display: block;
             margin-top: 0.25rem;
             position: relative;
@@ -46,15 +45,15 @@
             background: rgba(226,232,240,1); /* slate-200 */
         }
 
-        details.organization-menu .organization-arrow {
+        details .organization-arrow {
             transition: transform 300ms ease;
         }
 
-        details.organization-menu[open] .organization-arrow {
+        details[open] .organization-arrow {
             transform: rotate(180deg);
         }
 
-        details.organization-menu > summary::-webkit-details-marker {
+        details > summary::-webkit-details-marker {
             display: none;
         }
 
@@ -129,21 +128,21 @@
                         <span class="hidden whitespace-nowrap font-medium group-hover:inline">Payroll</span>
                     </a>
 
-                    <details class="organization-menu rounded-xl {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'bg-slate-100 ring-1 ring-slate-200' : '' }}">
-                        <summary class="flex w-full cursor-pointer list-none items-center rounded-xl px-3 py-3 text-slate-700 transition hover:bg-slate-200 hover:text-slate-900">
+                    <details class="organization-menu rounded-xl">
+                        <summary class="flex w-full cursor-pointer list-none items-center rounded-xl px-3 py-3 text-slate-700 transition hover:bg-slate-200 hover:text-slate-900 {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'bg-slate-100 text-slate-800 ring-1 ring-slate-200' : '' }}">
                             <span class="inline-flex h-6 w-6 shrink-0 items-center justify-center">
                                 <i class="fas fa-building text-base"></i>
                             </span>
-                            <span class="hidden flex-1 whitespace-nowrap font-medium group-hover:block">Organization</span>
+                            <span class="hidden flex-1 whitespace-nowrap font-medium group-hover:block {{ request()->routeIs('organization.departments.*', 'organization.positions.*') ? 'font-semibold text-slate-800' : '' }}">Organization</span>
                             <span class="organization-arrow hidden text-xs text-slate-500 group-hover:block">▼</span>
                         </summary>
 
                         <div class="organization-submenu mx-3 mb-2 mt-1 space-y-1">
-                            <a href="{{ route('organization.departments.index') }}" class="flex items-center rounded-lg px-8 py-2 text-sm text-slate-700 transition hover:bg-slate-200 hover:text-slate-900 {{ request()->routeIs('organization.departments.*') ? 'bg-slate-100 text-slate-800 ring-1 ring-slate-200' : '' }}">
+                            <a href="{{ route('organization.departments.index') }}" class="flex items-center rounded-lg px-8 py-2 text-sm text-slate-700 transition hover:bg-slate-200 hover:text-slate-900 {{ request()->routeIs('organization.departments.*') ? 'font-bold text-slate-800' : '' }}">
                                 <span>Departments</span>
                             </a>
 
-                            <a href="{{ route('organization.positions.index') }}" class="flex items-center rounded-lg px-8 py-2 text-sm text-slate-700 transition hover:bg-slate-200 hover:text-slate-900 {{ request()->routeIs('organization.positions.*') ? 'bg-slate-100 text-slate-800 ring-1 ring-slate-200' : '' }}">
+                            <a href="{{ route('organization.positions.index') }}" class="flex items-center rounded-lg px-8 py-2 text-sm text-slate-700 transition hover:bg-slate-200 hover:text-slate-900 {{ request()->routeIs('organization.positions.*') ? 'font-semibold text-slate-800' : '' }}">
                                 <span>Positions</span>
                             </a>
                         </div>
@@ -175,10 +174,6 @@
                         <h1 class="text-3xl font-extrabold text-slate-900">{{ $header ?? '' }}</h1>
                     </div>
                     <div class="flex items-center gap-3">
-                        <div class="hidden items-center gap-2 rounded-xl border border-slate-200 bg-white px-3 py-2 shadow-sm lg:flex">
-                            <i class="fas fa-search text-xs text-slate-400"></i>
-                            <span class="text-sm text-slate-500">Search...</span>
-                        </div>
                         <button class="inline-flex h-10 w-10 items-center justify-center rounded-xl border border-slate-200 bg-white text-slate-500 shadow-sm transition hover:bg-slate-50" type="button" aria-label="Notifications">
                             <i class="fas fa-bell text-sm"></i>
                         </button>
